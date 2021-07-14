@@ -13,7 +13,7 @@ import android.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
     //1. прежде всего подготовить класс shared preferences
     private SharedPreferences pref;
-    private TextView tvMain, tvRes;
+    private TextView tvMain, tvRes, tvTemp;
     private final String saveKey = "saveKey";
     //2. Найти ActionBar
     private ActionBar actionBar;
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         pref = getSharedPreferences("Test",MODE_PRIVATE);
         tvMain = findViewById(R.id.tvMain);
         tvRes = findViewById(R.id.tvRes);
+        tvTemp = findViewById(R.id.tvTemp);
         //2..
         actionBar = getSupportActionBar();
         //assert actionBar != null;//работает ли actionbar проверка
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             timeResult = (float)(currentTime - startTime)/1000;
             String timeBar = "time = " + timeResult;
             actionBar.setTitle(timeBar);
+            tvTemp.setText(String.valueOf(true_answer));
         }
         else//ошибка
         {
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             timeResult = (float)(currentTime - startTime)/1000;
             String timeBar = "time = " + timeResult;
             actionBar.setTitle(timeBar);
+            tvTemp.setText(String.valueOf(true_answer));
         }
     }
 
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
             timeResult = (float)(currentTime - startTime)/1000;
             String timeBar = "time = " + timeResult;
             actionBar.setTitle(timeBar);
+            tvTemp.setText(String.valueOf(true_answer));
         }
         else//ошибка
             {
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             timeResult = (float)(currentTime - startTime)/1000;
             String timeBar = "time = " + timeResult;
             actionBar.setTitle(timeBar);
+            tvTemp.setText(String.valueOf(true_answer));
             }
     }
 
