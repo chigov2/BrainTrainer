@@ -1,5 +1,6 @@
 package techmarket.uno.braintrainer;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
@@ -7,14 +8,31 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
     //1. прежде всего подготовить класс shared preferences
     private SharedPreferences pref;
-    //3.
-    private EditText editTextSave;
-    private TextView tvData;
+    private TextView tvMain, tvRes;
     private final String saveKey = "saveKey";
+    //2. Найти ActionBar
+    private ActionBar actionBar;
+    //3..
+    private int number_1,number_2,number_false,number_res,number_index;
+    private int max = 20;
+    private int min = 1;
+    private int max1 = 40;
+    private int min1 = 10;
+    private long startTime = 0;
+    private long currentTime = 0;
+    private float timeResult = 0;
+    //переменная для правильных ответов
+    private int true_answer = 0;
+    private int max_true_answer = 100;
+    private Boolean is_true_answer = false;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,27 +40,86 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
     }
-
-    public void onClickSave(View view) {
-        //4. для сохранения используем Editor
-        SharedPreferences.Editor edit = pref.edit();//создаем Editor -  позволяет сохранять данные в хранилище
-        edit.putString(saveKey,editTextSave.getText().toString());
-        edit.apply();
-    }
-
-    public void onClickGet(View view) {
-        editTextSave.setText(pref.getString(saveKey,"empty"));
-        tvData.setText(pref.getString(saveKey,"Ничего нет в памяти"));
-
-    }
-    //.2
     private void init(){
+        //1..
         pref = getSharedPreferences("Test",MODE_PRIVATE);
-        editTextSave = findViewById(R.id.editTextSave);
-        tvData = findViewById(R.id.tvData);
-        // из строки 34 копирум, чтобы при инициализации что-то иметь на экране
-        editTextSave.setText(pref.getString(saveKey,"empty"));
-        tvData.setText(pref.getString(saveKey,"empty"));
+        tvMain = findViewById(R.id.tvMain);
+        tvRes = findViewById(R.id.tvRes);
+        //2..
+        actionBar = getSupportActionBar();
+        //assert actionBar != null;//работает ли actionbar проверка
+        //actionBar.setTitle("tesr");
+        //5. Запуск счетчика времени
+        startTime = System.currentTimeMillis();
+        numbers();
+
     }
 
+    public void onClickTrue(View view)
+    {
+        if (is_true_answer)
+        {
+            true_answer = true_answer + 1;
+            numbers();
+            currentTime = System.currentTimeMillis();
+            timeResult = (float)(currentTime - startTime)/1000;
+            String timeBar = "time = " + timeResult;
+            actionBar.setTitle(timeBar);
+        }
+        else//ошибка
+        {
+            numbers();
+            currentTime = System.currentTimeMillis();
+            timeResult = (float)(currentTime - startTime)/1000;
+            String timeBar = "time = " + timeResult;
+            actionBar.setTitle(timeBar);
+        }
+    }
+
+    public void onClickFalse(View view)
+    {
+        if (!is_true_answer)
+        {
+            true_answer = true_answer + 1;
+            numbers();
+            currentTime = System.currentTimeMillis();
+            timeResult = (float)(currentTime - startTime)/1000;
+            String timeBar = "time = " + timeResult;
+            actionBar.setTitle(timeBar);
+        }
+        else//ошибка
+            {
+            numbers();
+            currentTime = System.currentTimeMillis();
+            timeResult = (float)(currentTime - startTime)/1000;
+            String timeBar = "time = " + timeResult;
+            actionBar.setTitle(timeBar);
+            }
+    }
+
+    //3. функция генерации случайных чисел
+    private void numbers(){
+        number_1 = (int) (Math.random() * (max-min));
+        number_2 = (int) (Math.random() * (max-min));
+        number_false = (int) (Math.random() * (max1-min1));
+        number_index = (int) (Math.random() * (4-1));
+        number_res = number_1 + number_2;
+        //5. Обманочка
+        String text;
+        if (number_index == 2)
+        {
+            text = number_1 + " + " + number_2 + " = " + number_res;
+            is_true_answer = true;
+        }
+        else
+            {
+            text = number_1 + " + " + number_2 + " = " + number_false;
+            is_true_answer = false;
+            }
+
+        //4. проверка
+        //tvMain.setText(String.valueOf(number_1));
+        tvRes.setText(String.valueOf(number_index));
+        tvMain.setText(text);
+    }
 }

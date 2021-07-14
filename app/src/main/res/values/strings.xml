@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Тренировка мозга</string>
-    <string name="save">Сохранить</string>
-    <string name="get">Получить значение</string>
+    <string name="true_button">Правда</string>
+    <string name="false_button">Ложь</string>
 
 </resources>
